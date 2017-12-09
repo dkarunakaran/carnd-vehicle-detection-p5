@@ -1,1 +1,4 @@
 dataset/*
+advanced_lane_findings.ipynb
+advanced_lane_helper_functions.py
+camera_cal/*
