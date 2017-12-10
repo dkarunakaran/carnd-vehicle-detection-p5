@@ -109,7 +109,6 @@ Parameters(
 
 Feature extraction varies with parameters. I have done feature extraction with various parameter combination and I found the above parameter combination is best suited for the feature extraction.
 
-
 <img src="output_images/feature_extraction.png">
 
 ### Classifier
