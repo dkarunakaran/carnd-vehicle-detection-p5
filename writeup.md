@@ -54,8 +54,12 @@ There are various feature extraction techniques has been used to train the class
 
 ### Spatial Binning
 
-<img src="output_images/spatial_binning.jpg">
-(picture obtained from course)
+
+<p align="center">
+  <img src="output_images/spatial_binning.jpg">
+  (picture obtained from course)
+</p>
+
 
 While it could be cumbersome to include three color channels of a full resolution image, you can perform spatial binning on an image and still retain enough information to help in finding vehicles.
 
