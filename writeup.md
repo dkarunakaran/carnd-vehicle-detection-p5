@@ -54,12 +54,7 @@ There are various feature extraction techniques has been used to train the class
 
 ### Spatial Binning
 
-
-<p align="center">
-  <img src="output_images/spatial_binning.jpg">
-  <b>(Picture obtained from the lecture)</b>
-</p>
-
+<img src="output_images/spatial_binning.jpg">
 
 While it could be cumbersome to include three color channels of a full resolution image, you can perform spatial binning on an image and still retain enough information to help in finding vehicles.
 
@@ -78,10 +73,8 @@ If we had to, we could differentiate the two images based on the differences in 
 
 Differentiating images by the intensity and range of color they contain can be helpful for looking at car vs non-car images.
 
-<p align="center">
-  <img src="output_images/histogram.jpg">
-  <b>(Picture obtained from the lecture)</b>
-</p>
+<img src="output_images/histogram.jpg">
+
 
 ### Histogram of oriented gradients(HOG)
 
