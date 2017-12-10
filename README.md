@@ -1,7 +1,7 @@
 # Vehicle Detection
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-### Decscription
+## Decscription
 
 In this project, goal is to write a software pipeline to detect vehicles in a video. 
 
@@ -21,9 +21,8 @@ Here are links to the labeled data for [vehicle](https://s3.amazonaws.com/udacit
 
 As part of the optional challenge, I have added the project 4(https://github.com/dkarunakaran/carnd-advanced-lane-lines-p4) implementation to this. For the detailed explanation of the project4, Please visit my [medium](https://towardsdatascience.com/self-driving-car-nanodegree-advanced-lane-finding-9c806b277a31) post.
 
-I was excited to apply this in real world. Here is the [youtube link]() of the car detection and advanced lane finding projects application in Sydney road.
 
-### Details
+## Details
 
 Dataset is downloaded from the above vehicle and non-vehicle links. Both vehicle and non-vehile images are downloaded to separate folder. Here is the count of the dataset.
 
@@ -53,7 +52,7 @@ Vehicle and Non-vehicle images:
 
 There are various feature extraction techniques has been used to train the classifier to detect the cars efficiently.
 
-#### Spatial Binning
+### Spatial Binning
 
 <img src="output_images/spatial_binning.jpg">
 
@@ -64,7 +63,7 @@ As you can see in the example above, even going all the way down to 32 x 32 pixe
 A convenient function for scaling down the resolution of an image is OpenCV's cv2.resize(). If you then wanted to convert this to a one dimensional feature vector, numpy's ravel() function can be used.
 
 
-#### color histogram
+### color histogram
 
 In photography a histogram is simply a graphical representation of the number of pixels in the image that fall within a certian range, either luminance or color. For example for a normal luminance histogram the graph shows the number of pixels for each luminance or brightness level from black to white. The higher the peak on the graph the more pixels are at that luminance level. With a color histogram the principle is the same but instead of seeing the levels of black graphed you will now see the number of pixels for each of the three main colors.
 
@@ -77,7 +76,7 @@ Differentiating images by the intensity and range of color they contain can be h
 <img src="output_images/histogram.jpg">
 
 
-#### Histogram of oriented gradients(HOG)
+### Histogram of oriented gradients(HOG)
 
 A feature descriptor is a representation of an image or an image patch that simplifies the image by extracting useful information and throwing away extraneous information.
 
@@ -117,10 +116,12 @@ Feature extraction varies with parameters. I have done feature extraction with v
 
 Support vector machines (SVMs) are a set of supervised learning methods used for classification, regression and outliers detection. I have decided to use LinearSVC as classifier this project. 
 
+Here is the code for training the classifier:
+
 ```
 sample_size = 8750
-cars = vehicles#[0:sample_size]
-notcars = non_vehicles#[0:sample_size]
+cars = vehicles[0:sample_size]
+notcars = non_vehicles[0:sample_size]
 
 car_features = list(map(lambda img: extract_features(img, params), cars))
 notcar_features = list(map(lambda img: extract_features(img, params), notcars))
@@ -155,6 +156,7 @@ print(round(t2-t, 2), 'Seconds to train SVC...')
 print('Test Accuracy of SVC = ', round(svc.score(X_test, y_test), 4))
 ```
 
+
 The cars and nor-cars images are loaded and extracted features using the above feature extraction techniques. These values are stored in car_features and notcar_features.We assumes that output of the carfeatures will be one and notcar_features is zero. 'y' value is filled based on that assumption. 'x' is the combination car_features and notcar_features list.
 
 The StandardScaler assumes data is normally distributed within each feature and will scale them such that the distribution is now centred around 0, with a standard deviation of 1. 'x' values are transformed using the function and get the output scaled_X.
@@ -165,6 +167,16 @@ There are few helping libraries to split the dataset. 'train_test_split' funtion
 
 Finally LinearSVC is defined and pass the x_train and y_train for trainning the classifier. Once it's completed, test datset is used to check the accuracy of the classifier.
 
+Classifier accuracy is around 99 percent on the test split of the dataset.
+
+```
+Using: 8 orientations 8 pixels per cell and 2 cells per block
+Feature vector length: 5568
+3.04 Seconds to train SVC...
+Test Accuracy of SVC =  0.9911
+
+```
+
 
 ### Sliding Window 
 
@@ -174,7 +186,9 @@ In the context of computer vision (and as the name suggests), a sliding window i
 
 Here are three test images and we can see all the bounding boxes for where my classifier reported positive detections. You can see that overlapping detections exist for each of the two vehicles, and in two of the frames, there is a false positive detection on the middle of the road. In this exercise, you'll build a heat-map from these detections in order to combine overlapping detections and remove false positives.
 
-In order to combine overlapping detections and remove false positives, heatmap and threahold limit are used. Here is the code that does this.
+In order to combine overlapping detections and remove false positives, heatmap and threahold limit are used. 
+
+Here is the code for heatmap and threshold limit:
 
 ```
 def add_heat(heatmap, bbox_list):
@@ -221,11 +235,11 @@ The hog sub-sampling is more efficient method for doing the sliding window appro
 
 I have decided to choose stating position of the window search from 350px to 656px and cells_per_step reduced to one to get more accurate result.
 
-As explained above, same heatmap and threshold with limit 2 techniqueue is used to combine overlapping detections and remove false positives.
+As explained above, same heatmap and threshold with limit 1 techniqueue is used to combine overlapping detections and remove false positives.
 
 <img src="output_images/hog_sub_sampling_result.png">
 
-Here is  the code for 
+Here is  the code for finding cars using hog sub-sampling window search:
 
 ```
 def find_cars_hog_sub(img, ystart, ystop, svc, scaler, params, cells_per_step = 1):
@@ -302,22 +316,50 @@ def find_cars_hog_sub(img, ystart, ystop, svc, scaler, params, cells_per_step = 
     
 ```
 
+### Pipeline video
+
 Finally create the pipeline vide by processing the each frame of the image with above techniques and create the video out of the 
 processed frames. 
 
 find_cars_hog_sub function extract all the bounding boxes detected for the cars in the image. heat_threshold function is used to combine overlapping detections and remove false positives and produce the output with bounding box added to the image.
 
+Here is the code for the pipeline:
+
 ```
 def pipeline(img):
     ystart = 350
     ystop = 656
-    threshold = 2
+    threshold = 1
     car_windows = find_cars_hog_sub(img, ystart, ystop, svc, X_scaler, params)
     draw_img, heat_map = heat_threshold(img, threshold, svc, X_scaler, car_windows, params)
     
     return draw_img
     
 ```
+
+Video:
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=_PjVU8I6sn0
+" target="_blank"><img src="http://img.youtube.com/vi/_PjVU8I6sn0/0.jpg" 
+alt="Pipeline video" width="640" height="420" border="10" /></a>
+
+
+### Discussion
+
+* Even thpough my code is detecting the vehicle accurately. Sometimes it detects other parts of the road as vehicle as well. I have to improve this by trainining my classifer with huge dataet or would like to use Deep Learning approach as per the [link](https://towardsdatascience.com/vehicle-detection-and-tracking-44b851d70508).
+
+* My project is depend on on Spatial and Hog Features. It's not giving all the time better result as it detected non-vehicle images as vehicle. I would like to use more feature extraction technique to increase the accuracy.
+
+
+### Optional challenge
+
+I have added advanced lane findings code to the vehicle detection project to complete the optional challenge.
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=nrKhsjDneBc
+" target="_blank"><img src="http://img.youtube.com/vi/nrKhsjDneBc/0.jpg" 
+alt="Pipeline video" width="640" height="420" border="10" /></a>
+
+
 
 
 
