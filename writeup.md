@@ -57,7 +57,7 @@ There are various feature extraction techniques has been used to train the class
 
 <p align="center">
   <img src="output_images/spatial_binning.jpg">
-  (picture obtained from course)
+  <b>(Picture obtained from course)</b>
 </p>
 
 
@@ -78,8 +78,10 @@ If we had to, we could differentiate the two images based on the differences in 
 
 Differentiating images by the intensity and range of color they contain can be helpful for looking at car vs non-car images.
 
-<img src="output_images/histogram.jpg">
-
+<p align="center">
+  <img src="output_images/histogram.jpg">
+  <b>(Picture obtained from course)</b>
+</p>
 
 ### Histogram of oriented gradients(HOG)
 
