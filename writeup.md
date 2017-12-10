@@ -57,7 +57,7 @@ There are various feature extraction techniques has been used to train the class
 
 <p align="center">
   <img src="output_images/spatial_binning.jpg">
-  <b>(Picture obtained from course)</b>
+  <b>(Picture obtained from the lecture)</b>
 </p>
 
 
@@ -80,7 +80,7 @@ Differentiating images by the intensity and range of color they contain can be h
 
 <p align="center">
   <img src="output_images/histogram.jpg">
-  <b>(Picture obtained from course)</b>
+  <b>(Picture obtained from the lecture)</b>
 </p>
 
 ### Histogram of oriented gradients(HOG)
